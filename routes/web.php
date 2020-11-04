@@ -19,3 +19,6 @@ Route::get('/', function () {
 
 
 Route::resource('post', 'PostController')->only('index', 'store');
+
+
+Route::resource('card', 'CardController')->only('index', 'store');

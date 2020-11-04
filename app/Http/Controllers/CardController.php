@@ -2,83 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostStoreRequest;
+use App\Jobs\SyncMedia;
+use App\Models\Card;
 use Illuminate\Http\Request;
 
-class CardsController extends Controller
+class CardController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $cards = Card::all();
+
+        return view('card.index', compact('cards'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\PostStoreRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function store(PostStoreRequest $request)
     {
-        //
-    }
+        $card = Card::create($request->validated());
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+//        Mail::to($card->author->email)->send(new ReviewPost($post));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        SyncMedia::dispatch($card);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        event(new NewCard($card));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $request->session()->flash('card.title', $card->id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->route('card.index');
     }
 }

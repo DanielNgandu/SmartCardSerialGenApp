@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    post.index template
+    card.index template
 @endsection

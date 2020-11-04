@@ -4,19 +4,19 @@ namespace App\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class NewPost
+class NewCard
 {
     use SerializesModels;
 
-    public $post;
+    public $card;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($card)
     {
-        $this->post = $post;
+        $this->card = $card;
     }
 }

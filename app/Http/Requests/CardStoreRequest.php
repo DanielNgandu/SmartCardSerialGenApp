@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostStoreRequest extends FormRequest
+class CardStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class PostStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'max:400'],
-            'content' => ['required', 'string'],
-            'author_id' => ['required', 'integer', 'exists:users,id'],
+            'vendor_name' => ['required', 'string', 'max:400'],
+            'vendor_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 }
